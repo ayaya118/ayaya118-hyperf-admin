@@ -248,7 +248,7 @@ abstract class AbstractController extends Controller
         } else {
             $count = $entity->count($conditions);
         }
-        
+
         $list = [];
         if ($count) {
             $attr['select'] = $columns;
@@ -649,6 +649,10 @@ abstract class AbstractController extends Controller
      */
     public function edit(int $id)
     {
+        if (method_exists($this, 'beforeFormQuery')) {
+            $hook_params = get_class_method_params_name($this, 'beforeFormQuery');
+            $this->beforeFormQuery($id);
+        }
         $record = $this->getEntity()->get($id);
         $history_versions = [];
         $version_enable = $this->getEntity()->isVersionEnable();
