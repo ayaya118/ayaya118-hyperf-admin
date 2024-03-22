@@ -74,7 +74,7 @@ if (!function_exists('move_local_file_to_filesystem')) {
         $filesystem = make(FilesystemFactory::class)->get($bucket);
         try {
             $stream = fopen($local_file_path, 'r');
-            $has = $filesystem->has($save_file_path);
+            $has = false;
             if (!$has) {
                 $filesystem->writeStream($save_file_path, $stream);
             }
@@ -88,7 +88,7 @@ if (!function_exists('move_local_file_to_filesystem')) {
             if (method_exists($filesystem, 'chmod')) {
                 $filesystem->chmod($save_file_path, 0644);
             }
-            $meta = $filesystem->getMetadata($save_file_path);
+            /*$meta = $filesystem->getMetadata($save_file_path);
             switch (config("file.storage.{$bucket}.driver")) {
                 case \Hyperf\Filesystem\Adapter\LocalAdapterFactory::class:
                     $file_path = config("file.storage.{$bucket}.cdn") . $meta['path'];
@@ -99,7 +99,8 @@ if (!function_exists('move_local_file_to_filesystem')) {
                 // TODO 更多 filesystem 渠道
                 default:
                     $file_path = $save_file_path;
-            }
+            }*/
+            $file_path = $save_file_path;
             if ($private) {
                 $file_path = filesystem_private_url($save_file_path, MINUTE * 5, $bucket);
             }
